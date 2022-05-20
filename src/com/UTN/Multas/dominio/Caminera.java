@@ -73,5 +73,18 @@ public class Caminera {
                 + " con: " + mayor + " actas labradas.";
         return aux;
     }
+    
+    public String mostrarMultas(){
+        //String aux = ""; //Utilizamos la clase StringBuilder para evitar ocupar memoria innecesariamente con cadenas que se desreferencian y deben ser eliminadas por el garbadge collector
+        StringBuilder aux = new StringBuilder("");
+        for (Multa multa : multas) {
+            if (multa != null) {
+               //aux += multa.toString() + "\n";
+               aux.append(multa.toString()).append("\n");
+            }            
+        }        
+        //return aux;
+        return aux.toString();
+    }
 
 }

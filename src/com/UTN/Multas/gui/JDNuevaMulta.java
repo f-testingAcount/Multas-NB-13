@@ -6,6 +6,7 @@ package com.UTN.Multas.gui;
 
 import com.UTN.Multas.dominio.Caminera;
 import com.UTN.Multas.dominio.Multa;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,9 +22,10 @@ public class JDNuevaMulta extends javax.swing.JDialog {
     public JDNuevaMulta(java.awt.Frame parent, boolean modal, Caminera objetoCaminera) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null); //Abre la ventana en el cento de la pantalla
         this.objetoCaminera = objetoCaminera;
     }
- 
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,14 +35,23 @@ public class JDNuevaMulta extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jtActa = new javax.swing.JTextField();
-        jtCodigo = new javax.swing.JTextField();
         jtMonto = new javax.swing.JTextField();
         jbAceptar = new javax.swing.JButton();
         jbCancelar = new javax.swing.JButton();
+        jcbCodigoInfraccion = new javax.swing.JComboBox<>();
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -49,6 +60,18 @@ public class JDNuevaMulta extends javax.swing.JDialog {
         jLabel2.setText("Codigo Infraccion");
 
         jLabel3.setText("Monto");
+
+        jtActa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtActaKeyTyped(evt);
+            }
+        });
+
+        jtMonto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtMontoKeyTyped(evt);
+            }
+        });
 
         jbAceptar.setText("Aceptar");
         jbAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -63,6 +86,8 @@ public class JDNuevaMulta extends javax.swing.JDialog {
                 jbCancelarActionPerformed(evt);
             }
         });
+
+        jcbCodigoInfraccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -80,9 +105,9 @@ public class JDNuevaMulta extends javax.swing.JDialog {
                         .addComponent(jbAceptar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                         .addComponent(jbCancelar))
-                    .addComponent(jtCodigo, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jtActa, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jtMonto, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jtMonto, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jcbCodigoInfraccion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -95,7 +120,7 @@ public class JDNuevaMulta extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcbCodigoInfraccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
@@ -104,7 +129,7 @@ public class JDNuevaMulta extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbAceptar)
                     .addComponent(jbCancelar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
 
         pack();
@@ -118,30 +143,68 @@ public class JDNuevaMulta extends javax.swing.JDialog {
         int acta, codigo;
         float monto;
         
+        if (jtActa.getText().equals(" ")
+                || jtMonto.getText().equals(" ")
+                || jcbCodigoInfraccion.getSelectedIndex() <= 0) {
+            JOptionPane.showMessageDialog(this, "No ha ingresado un valor!", "Validacion", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         //acta = jtActa.getText(); Esto no compila pq de un lado tengo un tipo primitivo y
-                                 //del otro tengo una cadena por lo cual es necesario 
-                                 //utilizar el wrapper (en este caso la clase Integer)
-                                 //para convertirlo con parse (en este caso Int) y equipararlo
-                                 //con el tipo del otro lado del signo =
-                                 //por lo tanto queda de la siguiente manera
-                                 
+        //del otro tengo una cadena por lo cual es necesario 
+        //utilizar el wrapper (en este caso la clase Integer)
+        //para convertirlo con parse (en este caso Int) y equipararlo
+        //con el tipo del otro lado del signo =
+        //por lo tanto queda de la siguiente manera
         acta = Integer.parseInt(jtActa.getText());
-        codigo = Integer.parseInt(jtCodigo.getText());
-        monto = Float.parseFloat(jtMonto.getText());
+        //codigo = Integer.parseInt(jtCodigo.getText());
         
+//        if (jcbCodigoInfraccion.getSelectedIndex() > 0) {
+            codigo = Integer.parseInt(jcbCodigoInfraccion.getSelectedItem().toString());          
+//        } else {
+//            JOptionPane.showMessageDialog(this, "No ha ingresado un codigo", "Validacion", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+        
+        monto = Float.parseFloat(jtMonto.getText());
+
         Multa objetoMulta = new Multa(acta, codigo, monto);
         boolean exito = objetoCaminera.registrarMulta(objetoMulta);
+
+        if (exito) {
+            JOptionPane.showMessageDialog(this, "Multa registrada!");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo registrar la Multa!");
+        }
     }//GEN-LAST:event_jbAceptarActionPerformed
 
+    private void jtActaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtActaKeyTyped
+        validarNumeros(evt);
+    }//GEN-LAST:event_jtActaKeyTyped
+
+    private void jtMontoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtMontoKeyTyped
+        validarNumeros(evt);
+    }//GEN-LAST:event_jtMontoKeyTyped
+
+    private void validarNumeros(java.awt.event.KeyEvent evt) {
+       char tecla = evt.getKeyChar();
+        if (Character.isDigit(tecla) == false) {
+            evt.consume();
+        } 
+    }
     
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbAceptar;
     private javax.swing.JButton jbCancelar;
+    private javax.swing.JComboBox<String> jcbCodigoInfraccion;
     private javax.swing.JTextField jtActa;
-    private javax.swing.JTextField jtCodigo;
     private javax.swing.JTextField jtMonto;
     // End of variables declaration//GEN-END:variables
 }
