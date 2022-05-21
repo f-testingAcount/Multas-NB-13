@@ -5,18 +5,23 @@
  */
 package com.UTN.Multas.dominio;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Fabricio
  */
 public class Caminera {
 
-    private Multa multas[];
+    //private Multa multas[]; //Reemplazo el vector por un ArrayList (Lista dinamica de geometria variable)
+   private ArrayList<Multa> multas;
     private int ultimaCarga;
 
-    public Caminera(int cantidad) {
-        multas = new Multa[cantidad];
-        ultimaCarga = 0;
+    //public Caminera(int cantidad) {
+        public Caminera() { //El parametro no es mas necesario
+        //multas = new Multa[cantidad];
+        multas = new ArrayList<>(); //Entre los parentesis puedo agregar una cantidad inicial para que trabaje, en principio, como un vector y alcanzado ese maximo comienza a ampliar capacidad. En este caso inicio con una lista vacia
+        //ultimaCarga = 0; //Al ser dinamico no es necesario chequear la ultima carga
     }
 
 //    public boolean registrarMulta(Multa multa) { 
@@ -28,19 +33,24 @@ public class Caminera {
 //}
      
     public boolean registrarMulta(Multa multa) { //idem metodo anterior evitando (por buena practica) colocar dos return
-        boolean aux = false;
-        if (ultimaCarga < multas.length) {
-            multas[ultimaCarga] = multa;
-            ultimaCarga++;
-            aux = true;
+//        boolean aux = false;
+//        if (ultimaCarga < multas.length) {
+//            multas[ultimaCarga] = multa;
+//            ultimaCarga++;
+//            aux = true;
+//        }
+        //return aux;
+        if (multas.contains(multa)) {
+            return false;
         }
-        return aux;
+        return multas.add(multa);
     }
 
     public float calcularTotal() {
         float aux = 0;
-        //for each
-        for (Multa multa : multas) {
+        //for each (sirve para vectores y arrays indistintamente, en el caso del for comun se reemplaso el length por el size)
+        //En el caso de (por ejemplo) multas[i] se coloca multas.getu(i)
+        for (Multa multa : multas) { 
             if (multa != null) {
                 aux += multa.calcularMonto();
             }

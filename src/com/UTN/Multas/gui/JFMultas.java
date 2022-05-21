@@ -20,7 +20,8 @@ public class JFMultas extends javax.swing.JFrame {
     public JFMultas() {
         initComponents();
         this.setLocationRelativeTo(null); //Abre la ventana en el cento de la pantalla
-        objetoCaminera = new Caminera(10);
+        //objetoCaminera = new Caminera(10);
+        objetoCaminera = new Caminera(); //Sacamos la cantidad fija para trabajar con una lista dinamica
     }
 
     /**
